@@ -1,0 +1,1554 @@
+<!DOCTYPE html>
+<html lang="eu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robot Delta Siemens - Tutorial Osoa</title>
+
+    <style>
+        /* ESTILO INDUSTRIAL Y SOBRIO ORIGINAL */
+        body {
+            background-color: #1a1c20;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 25px;
+        }
+
+        header {
+            border-bottom: 2px solid #005f87;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-container {
+            display: flex;
+            gap: 30px;
+        }
+
+        .logo-container img {
+            max-height: 70px;
+            filter: contrast(1.2);
+        }
+
+        details {
+            background: #25282e;
+            margin-bottom: 12px;
+            border-radius: 4px;
+            overflow: hidden;
+            border-left: 4px solid #005f87;
+        }
+
+        summary {
+            padding: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            background: #2c3038;
+            transition: background 0.3s;
+        }
+
+        summary:hover {
+            background: #363b44;
+        }
+
+        section {
+            padding: 20px;
+            border-top: 1px solid #3e444d;
+        }
+
+        .media-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        img, video {
+            width: 100%;
+            border-radius: 2px;
+            border: 1px solid #444;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background-color: #005f87;
+            text-align: left;
+            padding: 10px;
+        }
+
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #3e444d;
+        }
+
+        .img-minimo {
+            width: 300px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .img-minimo:hover {
+            transform: scale(1.50);
+            border-color: #005f87;
+        }
+
+        .img-tutorial {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 300px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            transition: transform 0.3s ease-in-out;
+            cursor: pointer;
+            border: 2px solid #3e444d;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .img-tutorial:hover {
+            transform: scale(1.50);
+            border-color: #005f87;
+        }
+
+        ul {
+            list-style-type: square;
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .pdf-link {
+            color: #666666;
+            font-weight: bold;
+            font-size: 24px;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .pdf-link:hover {
+            color: #333333;
+            text-decoration: underline;
+        }
+
+        .carousel-slide {
+            margin: 0; 
+            padding: 25px; 
+            box-sizing: border-box; 
+            display: flex; 
+            flex-direction: column; 
+            position: absolute; 
+            width: 100%; 
+            opacity: 0; 
+            transition: opacity 0.4s ease; 
+            pointer-events: none;
+        }
+
+        .carousel-slide.active {
+            opacity: 1; 
+            pointer-events: auto;
+        }
+
+        .carousel-link {
+            padding: 12px 24px; 
+            cursor: pointer; 
+            background: #00a0d2; 
+            color: white; 
+            border: none; 
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        /* --- NUEVO: ESTILOS PARA GESTIÓN DE IDIOMAS (Arquitectura limpia CSS) --- */
+        .lang-es { display: none !important; }
+        body.is-es .lang-eu { display: none !important; }
+        
+        /* Semántica visual de los elementos según su naturaleza */
+        body.is-es div.lang-es, body.is-es p.lang-es, body.is-es section.lang-es, body.is-es ul.lang-es { display: block !important; }
+        body.is-es span.lang-es, body.is-es strong.lang-es, body.is-es a.lang-es { display: inline !important; }
+        body.is-es table.lang-es { display: table !important; }
+
+        /* Estilo del menú semántico de navegación */
+        .lang-nav {
+            display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 20px;
+        }
+        .btn-lang {
+            background-color: #2c3038; border: 2px solid #005f87; color: #e0e0e0;
+            padding: 8px 16px; border-radius: 4px; font-weight: bold; cursor: pointer; transition: 0.2s;
+        }
+        .btn-lang[aria-pressed="true"] { background-color: #00a0d2; color: white; border-color: #00a0d2; }
+    </style>
+</head>
+<body>
+
+    <nav class="lang-nav" aria-label="Hizkuntza / Idioma">
+        <button id="btn-eu" class="btn-lang" aria-pressed="true" onclick="setLanguage('eu')">EUS</button>
+        <button id="btn-es" class="btn-lang" aria-pressed="false" onclick="setLanguage('es')">ES</button>
+    </nav>
+
+    <header>
+        <div>
+            <h1>Robot Delta Siemens</h1>
+            <p class="lang-eu">PLC Teknologikoa & Servomotorren Gida</p>
+            <p class="lang-es">Guía de Servomotores y PLC Tecnológico</p>
+        </div>
+        <div class="logo-container">
+            <img src="Beharrezko_elementuak/Logoak/barakaldo.jpg" alt="FP Barakaldo">
+            <img src="Beharrezko_elementuak/Logoak/tknika.png" alt="TKnika">
+            <img src="Beharrezko_elementuak/Logoak/hezkuntza.png" alt="Hezkuntza">
+        </div>
+    </header>
+
+    <main>
+        <details>
+            <summary>
+                <span class="lang-eu">1. Arduradunaren datuak</span>
+                <span class="lang-es">1. Datos del responsable</span>
+            </summary>
+            <section>
+                <div class="lang-eu">
+                    <p><strong>Izena:</strong> Uraitz Ormaza</p>
+                    <p><strong>Kontaktua:</strong> uormaza@fpbarakaldolh.eus</p>
+                    <p><strong>Laborategia:</strong> Automatizazio gela.</p>
+                </div>
+                <div class="lang-es">
+                    <p><strong>Nombre:</strong> Uraitz Ormaza</p>
+                    <p><strong>Contacto:</strong> uormaza@fpbarakaldolh.eus</p>
+                    <p><strong>Laboratorio:</strong> Aula de automatización.</p>
+                </div>
+            </section>
+            <section>
+                <div class="lang-eu">
+                    <p><strong>Izena:</strong> Kepa Bastegieta</p>
+                    <p><strong>Kontaktua:</strong> kbasteguieta@fpbarakaldolh.eus</p>
+                    <p><strong>Laborategia:</strong> Automatizazio gela.</p>
+                </div>
+                <div class="lang-es">
+                    <p><strong>Nombre:</strong> Kepa Bastegieta</p>
+                    <p><strong>Contacto:</strong> kbasteguieta@fpbarakaldolh.eus</p>
+                    <p><strong>Laboratorio:</strong> Aula de automatización.</p>
+                </div>
+            </section>
+        </details>
+
+        <details>
+            <summary>
+                <span class="lang-eu">2. Laburpena</span>
+                <span class="lang-es">2. Resumen</span>
+            </summary>
+            <section>
+                <div class="lang-eu">
+                    <p>Maketa hau <strong>Siemens</strong> teknologian oinarritutako robotika industrialeko sistemen erakusle garbia da. Bere funtzionamendua hiru zutabe nagusitan oinarritzen da:</p>
+
+                    <div style="margin-bottom: 20px;">
+                        <h3 style="color: #00a0d2; border-bottom: 1px solid #333; padding-bottom: 5px;">1. Kontrol Adimenduna (S7-1500TF)</h3>
+                        <ul>
+                            <li>Sistemaren muina <strong>S7-1500TF</strong> motako CPU bat da.</li>
+                            <li><strong>"T" (Technology):</strong> Kontrolatzaile honek barne-algoritmo espezifikoak ditu ardatzen arteko interpolazio zinematikoa egiteko. Robotak badaki motor bakoitzak zein angelu hartu behar duen bentosa X, Y, Z koordenatu zehatz batera eramateko.</li>
+                            <li><strong>"F" (Fail-safe):</strong> Segurtasun industrialeko funtzioak (Emergency Stop, etab.) integratzeko gaitasuna.</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <h3 style="color: #00a0d2; border-bottom: 1px solid #333; padding-bottom: 5px;">2. Mugimenduaren Exekuzioa (SINAMICS V90)</h3>
+                        <ul>
+                            <li>Mugimendu fisikoa hiru <strong>SINAMICS V90</strong> servo drivek eta haiei lotutako serboek egiten dute.</li>
+                            <li><strong>Komunikazioa:</strong> Drive-ak eta PLC-a <strong>PROFINET</strong> bidez lotuta daude denbora errealeko kontrolerako. (TELEGRAMA 105, IRT)</li>
+                            <li><strong>Feedback-a:</strong> Motorrek kodetzaileak (encoder absolutua) dituzte, PLCari uneoro euren posizio zehatzaren berri emateko.</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <h3 style="color: #00a0d2; border-bottom: 1px solid #333; padding-bottom: 5px;">3. Periferia Dezentralizatua (ET 200)</h3>
+                        <ul>
+                            <li><strong>Sarrerak/Irteerak:</strong> Hemen konektatzen dira frenua eta bentosaren elektrobalbula, aire-presio sentsoreak edo segurtasun amaiera-etengailuak.</li>
+                            <li><strong>Egitura:</strong> Kableatu zentralizatua saihesten du, instalazio garbiagoa eta modularra lortuz.</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <h3 style="color: #00a0d2; border-bottom: 1px solid #333; padding-bottom: 5px;">4. Programazio Ingurunea (TIA Portal)</h3>
+                        <p>Software mailan, <strong>Objektu Teknologikoak (TO)</strong> erabiltzen dira. Horri esker, robot osoa "objektu" bakar gisa tratatzen da, programazioa asko erraztuz <em>Motion Control</em> bloke estandarren bidez.</p>
+                    </div>
+                </div>
+
+                <div class="lang-es">
+                    <p>Esta maqueta es un claro exponente de los sistemas de robótica industrial basados en tecnología <strong>Siemens</strong>. Su funcionamiento se basa en tres pilares principales:</p>
+
+                    <div style="margin-bottom: 20px;">
+                        <h3 style="color: #00a0d2; border-bottom: 1px solid #333; padding-bottom: 5px;">1. Control Inteligente (S7-1500TF)</h3>
+                        <ul>
+                            <li>El núcleo del sistema es una CPU tipo <strong>S7-1500TF</strong>.</li>
+                            <li><strong>"T" (Technology):</strong> Este controlador tiene algoritmos internos específicos para realizar la interpolación cinemática entre los ejes. El robot sabe qué ángulo debe tomar cada motor para llevar la ventosa a una coordenada X, Y, Z exacta.</li>
+                            <li><strong>"F" (Fail-safe):</strong> Capacidad de integrar funciones de seguridad industrial (Parada de Emergencia, etc.).</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <h3 style="color: #00a0d2; border-bottom: 1px solid #333; padding-bottom: 5px;">2. Ejecución del Movimiento (SINAMICS V90)</h3>
+                        <ul>
+                            <li>El movimiento físico lo realizan tres servo drives <strong>SINAMICS V90</strong> y sus servos asociados.</li>
+                            <li><strong>Comunicación:</strong> Los drives y el PLC están conectados mediante <strong>PROFINET</strong> para el control en tiempo real. (TELEGRAMA 105, IRT)</li>
+                            <li><strong>Feedback:</strong> Los motores tienen codificadores (encoder absoluto) para informar en todo momento al PLC de su posición exacta.</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <h3 style="color: #00a0d2; border-bottom: 1px solid #333; padding-bottom: 5px;">3. Periferia Descentralizada (ET 200)</h3>
+                        <ul>
+                            <li><strong>Entradas/Salidas:</strong> Aquí se conectan el freno y la electroválvula de la ventosa, sensores de presión de aire o interruptores de final de carrera de seguridad.</li>
+                            <li><strong>Estructura:</strong> Evita el cableado centralizado, logrando una instalación más limpia y modular.</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <h3 style="color: #00a0d2; border-bottom: 1px solid #333; padding-bottom: 5px;">4. Entorno de Programación (TIA Portal)</h3>
+                        <p>A nivel de software, se utilizan <strong>Objetos Tecnológicos (TO)</strong>. Esto permite tratar todo el robot como un único "objeto", facilitando mucho la programación a través de bloques estándar de <em>Motion Control</em>.</p>
+                    </div>
+                </div>
+
+                <img src="Beharrezko_elementuak/Argazkiak/argazkia.jpg" alt="Robot Delta" class="img-tutorial">
+            </section>
+        </details>
+
+        <details>
+            <summary>
+                <span class="lang-eu">3. Helburuak</span>
+                <span class="lang-es">3. Objetivos</span>
+            </summary>
+            <section>
+                <div class="lang-eu">
+                    <p>Tutorial honen amaieran, ikaslea gai izango da robot delta osoa martxan jartzeko:</p>
+
+                    <div style="margin-bottom: 20px;">
+                        <h3 style="color: #00a0d2; border-bottom: 1px solid #333; padding-bottom: 5px;">1. Hardware Konfigurazioa eta Komunikazioa</h3>
+                        <ul>
+                            <li><strong>PROFINET Integrazioa:</strong> TIA Portalean PLC-a, ET 200 periferia eta hiru V90 drive-ak sarean integratzea.</li>
+                            <li><strong>Parametrizazioa:</strong> Drive-en eta motorren doikuntzak egitea (V-Assistant edo TIA Portal bidez).</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <h3 style="color: #00a0d2; border-bottom: 1px solid #333; padding-bottom: 5px;">2. Objektu Teknologikoen (TO) Kudeaketa</h3>
+                        <ul>
+                            <li><strong>Ardatz Linealak:</strong> Hiru <code>TO_PositioningAxis</code> objektu konfiguratzea.</li>
+                            <li><strong>Zinematika:</strong> <code>TO_Kinematics</code> objektua sortzea, besoen neurri errealak sartuz robotak bere burua espazioan ($X, Y, Z$) koka dezan.</li>
+                            <li><strong>Homing-a:</strong> Ardatz bakoitzaren "zero" puntua bilatzeko prozedura programatzea.</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <h3 style="color: #00a0d2; border-bottom: 1px solid #333; padding-bottom: 5px;">3. Mugimendu Bakunak (JOG) eta Eskuzko Kontrola</h3>
+                        <ul>
+                            <li><strong>Commissioning:</strong> TIA Portal-eko tresnekin motorrak banan-banan mugitzea norabideak eta mugak egiaztatzeko.</li>
+                            <li><strong>Koordinazioa:</strong> Robotaren muturra (bentosa) espazioan mugitzea, ardatzen arteko sinkronizazioa ikusteko.</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <h3 style="color: #00a0d2; border-bottom: 1px solid #333; padding-bottom: 5px;">4. Pick & Place Sekuentziaren Programazioa</h3>
+                        <ul>
+                            <li><strong>Logika:</strong> Objektu bat $P1$ puntuan jaso eta $P2$ puntuan uzteko sekuentzia osoa.</li>
+                            <li><strong>Motion Blokeak:</strong> <code>MC_MoveLinear</code> edo <code>MC_MoveDirectAbsolute</code> funtzioen erabilera koordenatu kartesiarrekin.</li>
+                            <li><strong>Periferiaren Kontrola:</strong> ET 200 moduluaren bidez elektrobalbulak eta frenuak mugimenduarekin batera gobernatzea.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="lang-es">
+                    <p>Al final de este tutorial, el alumno será capaz de poner en marcha todo el robot delta:</p>
+
+                    <div style="margin-bottom: 20px;">
+                        <h3 style="color: #00a0d2; border-bottom: 1px solid #333; padding-bottom: 5px;">1. Configuración Hardware y Comunicación</h3>
+                        <ul>
+                            <li><strong>Integración PROFINET:</strong> Integrar en red el PLC, la periferia ET 200 y los tres drives V90 en TIA Portal.</li>
+                            <li><strong>Parametrización:</strong> Realizar los ajustes de los drives y motores (mediante V-Assistant o TIA Portal).</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <h3 style="color: #00a0d2; border-bottom: 1px solid #333; padding-bottom: 5px;">2. Gestión de Objetos Tecnológicos (TO)</h3>
+                        <ul>
+                            <li><strong>Ejes Lineales:</strong> Configurar tres objetos <code>TO_PositioningAxis</code>.</li>
+                            <li><strong>Cinemática:</strong> Crear el objeto <code>TO_Kinematics</code> introduciendo las medidas reales de los brazos para que el robot se sitúe en el espacio ($X, Y, Z$).</li>
+                            <li><strong>Homing:</strong> Programar el procedimiento de búsqueda del punto "cero" de cada eje.</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <h3 style="color: #00a0d2; border-bottom: 1px solid #333; padding-bottom: 5px;">3. Movimientos Simples (JOG) y Control Manual</h3>
+                        <ul>
+                            <li><strong>Puesta en marcha:</strong> Mover los motores individualmente con las herramientas de TIA Portal para comprobar direcciones y límites.</li>
+                            <li><strong>Coordinación:</strong> Mover el extremo del robot (ventosa) en el espacio para observar la sincronización entre los ejes.</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <h3 style="color: #00a0d2; border-bottom: 1px solid #333; padding-bottom: 5px;">4. Programación de la Secuencia Pick & Place</h3>
+                        <ul>
+                            <li><strong>Lógica:</strong> Secuencia completa para recoger un objeto en el punto $P1$ y dejarlo en el punto $P2$.</li>
+                            <li><strong>Bloques Motion:</strong> Uso de funciones <code>MC_MoveLinear</code> o <code>MC_MoveDirectAbsolute</code> con coordenadas cartesianas.</li>
+                            <li><strong>Control de la Periferia:</strong> Controlar electroválvulas y frenos de forma concurrente al movimiento mediante el módulo ET 200.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <img src="Beharrezko_elementuak/Argazkiak/argazkia.jpg" alt="Delta Robotaren Eskema" class="img-tutorial">
+            </section>
+        </details>
+
+        <details>
+            <summary>
+                <span class="lang-eu">4. Maketa kontrolatzeko jarraibideak eta eskema elektrikoa</span>
+                <span class="lang-es">4. Instrucciones para controlar la maqueta y esquema eléctrico</span>
+            </summary>
+            <section>
+                <div class="lang-eu">
+                    <p>Maketa hau <strong>robot delta</strong> bat da, delta hau zentruan 3D inpresora edo aluminiozko materialekin eginda dago. Ez da robot komertzial bat, beraz kontuz erabili beharrekoa da.</p>
+                    <p>Abiadurak kontrolatu eta mugimenduekin kontuz eduki behar dugu ez apurtzeko. Beheko bideo honetan azalduko ditut konektatzeko pausuak.</p>
+                </div>
+                <div class="lang-es">
+                    <p>Esta maqueta es un <strong>robot delta</strong> construido en el centro con impresión 3D o materiales de aluminio. No es un robot comercial, por lo que debe utilizarse con cuidado.</p>
+                    <p>Debemos controlar las velocidades y tener cuidado con los movimientos para no romperlo. En el siguiente vídeo explicaré los pasos para su conexión.</p>
+                </div>
+
+                <div class="video-container">
+                    <video controls aria-label="Robot delta konektatzeko eta erabiltzeko bideo-gida">
+                        <source src="video/kontrol_gida.mp4" type="video/mp4">
+                        <span class="lang-eu">Zure nabigatzaileak ez du bideoa erreproduzitzen.</span>
+                        <span class="lang-es">Tu navegador no reproduce el vídeo.</span> 
+                        <a href="video/kontrol_gida.mp4">
+                            <span class="lang-eu">Deskargatu bideoa hemen</span>
+                            <span class="lang-es">Descargar el vídeo aquí</span>
+                        </a>.
+                    </video>
+                </div>
+
+                <p style="margin-top: 20px;">
+                    <a href="Beharrezko_elementuak/Eskema elektrikoa/Robot_Delta_plano_electrico.pdf" target="_blank" rel="noopener noreferrer" class="pdf-link">
+                        <span class="lang-eu">Eskema Elektrikoa</span>
+                        <span class="lang-es">Esquema Eléctrico</span>
+                    </a>
+                </p>
+            </section>
+        </details>
+
+        <details>
+            <summary>
+                <span class="lang-eu">5. Ezaugarriak eta aldagaiak</span>
+                <span class="lang-es">5. Características y variables</span>
+            </summary>
+            <section>
+                <div class="lang-eu">
+                    <p><strong>Erabiliko den materialaren zerrenda:</strong></p>
+                </div>
+                <div class="lang-es">
+                    <p><strong>Lista del material que se utilizará:</strong></p>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col"><span class="lang-eu">Osagaia</span><span class="lang-es">Componente</span></th>
+                            <th scope="col"><span class="lang-eu">Erreferentzia</span><span class="lang-es">Referencia</span></th>
+                            <th scope="col"><span class="lang-eu">Firmware / Bertsioa</span><span class="lang-es">Firmware / Versión</span></th>
+                            <th scope="col"><span class="lang-eu">IP Helbidea</span><span class="lang-es">Dirección IP</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>PLC CPU 1517TF-3 PN/DP</td><td>6ES7 517-3UP00-0AB0</td><td>v2.9</td><td>192.168.21.250</td></tr>
+                        <tr>
+                            <td><span class="lang-eu">Periferia deszentralizatua (ET200SP) IM 155-6 PN/2 HF</span><span class="lang-es">Periferia descentralizada (ET200SP) IM 155-6 PN/2 HF</span></td>
+                            <td>6ES7 155-6AU01-0CN0</td><td>v4.2</td><td>192.168.21.254</td>
+                        </tr>
+                        <tr>
+                            <td><span class="lang-eu">Sarrera digitalak (DI 8x24VDC HF)</span><span class="lang-es">Entradas digitales (DI 8x24VDC HF)</span></td>
+                            <td>6ES7 131-6BF00-0CA0</td><td>v2.0</td>
+                            <td><span class="lang-eu">Periferian integratuta (Base unit light)</span><span class="lang-es">Integrada en periferia (Base unit light)</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="lang-eu">Irteera digitalak (DQ 8x24VDC/0.5A HF)</span><span class="lang-es">Salidas digitales (DQ 8x24VDC/0.5A HF)</span></td>
+                            <td>6ES7 132-6BF00-0CA0</td><td>v2.0</td>
+                            <td><span class="lang-eu">Periferian integratuta (Base unit light)</span><span class="lang-es">Integrada en periferia (Base unit light)</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="lang-eu">IO-Link (CM 4xIO-Link) (ez da erabiltzen)</span><span class="lang-es">IO-Link (CM 4xIO-Link) (no se usa)</span></td>
+                            <td>6ES7 137-6BD00-0BA0</td><td>v2.2</td>
+                            <td><span class="lang-eu">Periferian integratuta (Base unit light)</span><span class="lang-es">Integrada en periferia (Base unit light)</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="lang-eu">Drive (1. ardatza) V90 PN</span><span class="lang-es">Drive (Eje 1) V90 PN</span></td>
+                            <td>6SL3 210-5FB10-4UFx</td><td>v1.4</td><td>192.168.21.251</td>
+                        </tr>
+                        <tr>
+                            <td><span class="lang-eu">Drive (2. ardatza) V90 PN</span><span class="lang-es">Drive (Eje 2) V90 PN</span></td>
+                            <td>6SL3 210-5FB10-4UFx</td><td>v1.4</td><td>192.168.21.252</td>
+                        </tr>
+                        <tr>
+                            <td><span class="lang-eu">Drive (3. ardatza) V90 PN</span><span class="lang-es">Drive (Eje 3) V90 PN</span></td>
+                            <td>6SL3 210-5FB10-4UFx</td><td>v1.4</td><td>192.168.21.253</td>
+                        </tr>
+                        <tr>
+                            <td><span class="lang-eu">HMI (simulatua) KTP1200 Basic PN</span><span class="lang-es">HMI (simulado) KTP1200 Basic PN</span></td>
+                            <td>6AV2 123-2MB03-0AX0</td><td>v17.0.0.0</td><td>192.168.21.249</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="lang-eu"><p><strong>PLC irteera garrantzitsuak (Tag-en zerrenda):</strong></p></div>
+                <div class="lang-es"><p><strong>Salidas importantes del PLC (Lista de Tags):</strong></p></div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col"><span class="lang-eu">Tag Izena / Deskribapena</span><span class="lang-es">Nombre Tag / Descripción</span></th>
+                            <th scope="col"><span class="lang-eu">Helbidea</span><span class="lang-es">Dirección</span></th>
+                            <th scope="col"><span class="lang-eu">Funtzioa / Oharrak</span><span class="lang-es">Función / Notas</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="lang-eu">A3 ardatzaren frenua</span><span class="lang-es">Freno del eje A3</span></td>
+                            <td>Q30.0</td>
+                            <td><span class="lang-eu">Aktibatuta frenua kentzen da</span><span class="lang-es">Al activarse se quita el freno</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="lang-eu">A1 ardatzaren frenua</span><span class="lang-es">Freno del eje A1</span></td>
+                            <td>Q30.1</td>
+                            <td><span class="lang-eu">Aktibatuta frenua kentzen da</span><span class="lang-es">Al activarse se quita el freno</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="lang-eu">A2 ardatzaren frenua</span><span class="lang-es">Freno del eje A2</span></td>
+                            <td>Q30.2</td>
+                            <td><span class="lang-eu">Aktibatuta frenua kentzen da</span><span class="lang-es">Al activarse se quita el freno</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="lang-eu">Bentosa</span><span class="lang-es">Ventosa</span></td>
+                            <td>Q30.3</td>
+                            <td><span class="lang-eu">Balbula monoestablea da</span><span class="lang-es">Es una válvula monoestable</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="lang-eu">Argia</span><span class="lang-es">Luz</span></td>
+                            <td>Q30.4</td>
+                            <td>-</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </details>
+
+        <details>
+            <summary>
+                <span class="lang-eu">6. Maketaren funtzionamendueren inguruko jarraibideak</span>
+                <span class="lang-es">6. Instrucciones sobre el funcionamiento de la maqueta</span>
+            </summary>
+            <section>
+                <div class="lang-eu">
+                    <p>Robot hau ikastetxean bertan diseinatu eta muntatutako prototipoa da, eta bere pieza gehienak <strong>3D inprimaketa</strong> bidez ekoitzi dira. Hori dela eta, arreta handiz erabili behar da, hasiera batean abiadura motelak ezarriz. Praktiketan abiadura mugak ezartzen joango gara.</p>
+                    <p>Saio hauetan zehar, robotari puntu zehatzak emango dizkiogu, mugimenduak horien arabera bideratzeko. Azken praktikan, <em>'Pick & Place'</em> eragiketa bat burutuko dugu (piezak jaso eta lekuan jartzea). Hala ere, garrantzitsuena ez da pieza mugitzea bera, ezta helburua ezin hobeto lortzea ere; gure lehentasuna robota nola gidatu behar den ikastea da. Beraz, egon lasai prozesuan zehar.</p>
+                </div>
+                <div class="lang-es">
+                    <p>Este robot es un prototipo diseñado y montado en el propio centro, y la mayoría de sus piezas se han fabricado mediante <strong>impresión 3D</strong>. Por ello, debe utilizarse con mucho cuidado, estableciendo velocidades lentas en un principio. En las prácticas iremos estableciendo límites de velocidad.</p>
+                    <p>Durante estas sesiones, proporcionaremos puntos exactos al robot para dirigir los movimientos en consecuencia. En la última práctica, realizaremos una operación de <em>'Pick & Place'</em> (recoger y colocar piezas). Sin embargo, lo más importante no es mover la pieza en sí, ni lograr el objetivo a la perfección; nuestra prioridad es aprender cómo guiar al robot. Por tanto, tomáoslo con calma durante el proceso.</p>
+                </div>
+            </section>
+        </details>
+
+        <details>
+            <summary>
+                <span class="lang-eu">7. Praktika 0.1: Konfigurazioa</span>
+                <span class="lang-es">7. Práctica 0.1: Configuración</span>
+            </summary>
+            <section style="padding: 20px; font-family: sans-serif;">
+                <div class="lang-eu">
+                    <p>Atal honetan Delta_Praktika_0.zap17 deituriko fitxategia zabalduko dugu TIA Portal v17-arekin.</p>
+                </div>
+                <div class="lang-es">
+                    <p>En este apartado abriremos el archivo llamado Delta_Praktika_0.zap17 con TIA Portal v17.</p>
+                </div>
+
+                <p style="margin-top: 20px;">
+                    <a href="Beharrezko_elementuak/Programak/Delta_Praktika_0.zap17" target="_blank" rel="noopener noreferrer" class="carousel-link">
+                        <span class="lang-eu">Deskargatu Fitxategia</span><span class="lang-es">Descargar Archivo</span>
+                    </a>
+                </p>
+
+                <div class="video-container" style="display: flex; justify-content: center; margin: 30px 0;">
+                    <video controls style="width: 100%; max-width: 1000px; aspect-ratio: 16 / 9; border-radius: 8px; background: #000;">
+                        <source src="Beharrezko_elementuak/Bideoak/Praktika_0_eus_e.mp4" type="video/mp4">
+                    </video>
+                </div>
+
+                <hr style="margin: 40px 0; border: 0; border-top: 1px solid #eee;">
+
+                <div class="carousel-container" id="p0" style="max-width: 850px; margin: 0 auto; position: relative;">
+                    <div class="carousel-track" style="position: relative; border: 1px solid #ddd; border-radius: 10px; background: #fff; min-height: 550px; overflow: hidden;">
+                        
+                        <figure class="carousel-slide active">
+                            <img src="Beharrezko_elementuak/Argazkiak/0praktika/konfigurazioa1.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6; color: #212529;">
+                                <strong style="display: block; font-size: 1.1rem; color: #00a0d2; margin-bottom: 8px;"><span class="lang-eu">Konfigurazio Orokorra</span><span class="lang-es">Configuración General</span></strong>
+                                <span class="lang-eu">PLC 1500TF, 3 V90, HMI (simulatu egingo dugu) eta periferiaren IP-ak hemen.</span>
+                                <span class="lang-es">PLC 1500TF, 3 V90, HMI (lo simularemos) y las IPs de la periferia aquí.</span>
+                            </figcaption>
+                        </figure>
+
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/0praktika/konfigurazioa2.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;"><span class="lang-eu">Komunikazioa</span><span class="lang-es">Comunicación</span></strong>
+                                <span class="lang-eu">Telegrama 105 IRT modu isokronoan komunikatzen dira.</span>
+                                <span class="lang-es">Se comunican mediante Telegrama 105 IRT en modo isócrono.</span>
+                            </figcaption>
+                        </figure>
+
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/0praktika/konfigurazioa3.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;"><span class="lang-eu">Topologia</span><span class="lang-es">Topología</span></strong>
+                                <span class="lang-eu">Modu iskronoan garrantzitsua da topologia adieraztea.</span>
+                                <span class="lang-es">En modo isócrono es importante indicar la topología.</span>
+                            </figcaption>
+                        </figure>
+
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/0praktika/konfigurazioa4.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">HMI</strong>
+                                <span class="lang-eu">HMI hau simulatu egingo dugu PC-an.</span>
+                                <span class="lang-es">Simularemos este HMI en el PC.</span>
+                            </figcaption>
+                        </figure>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
+                        <button onclick="moveCarousel('p0', -1)" class="carousel-link"><span class="lang-eu">&larr; Aurrekoa</span><span class="lang-es">&larr; Anterior</span></button>
+                        <span class="counter-text" style="color: #666; font-weight: bold;">1 / 4</span>
+                        <button onclick="moveCarousel('p0', 1)" class="carousel-link"><span class="lang-eu">Hurrengoa &rarr;</span><span class="lang-es">Siguiente &rarr;</span></button>
+                    </div>
+                </div>
+            </section>
+        </details>
+
+        <details>
+            <summary>
+                <span class="lang-eu">8. Praktika 0.2: Simulazioa</span>
+                <span class="lang-es">8. Práctica 0.2: Simulación</span>
+            </summary>
+            <section style="padding: 20px; font-family: sans-serif;">
+                <div class="lang-eu">
+                    <p>Atal honetan Delta_Praktika_sim.zap17 deituriko fitxategia zabalduko dugu TIA Portal v17-arekin.</p>
+                    <p>Aurrerago ikusiko diren konfigurazio, bloke etab guztiak simulatu daitezke, horretarako atal honetan nola simulatu ikusiko dugu. Beharbada, oraindik atal batzuk ez dituzue jakingo, baina lasai hurrengo praktiketan ikusiko dira. Nahiz eta aurrerago ikusi, simulazioaren lehenengotariko gauza jartzeko aukera egin da.</p>
+                </div>
+                <div class="lang-es">
+                    <p>En este apartado abriremos el archivo llamado Delta_Praktika_sim.zap17 con TIA Portal v17.</p>
+                    <p>Todas las configuraciones, bloques, etc., que se verán más adelante se pueden simular. En este apartado veremos cómo hacerlo. Quizás aún no conozcáis algunas partes, pero tranquilos, se verán en las siguientes prácticas. Aunque se vea más adelante, se ha optado por poner la simulación entre las primeras cosas.</p>
+                </div>
+
+                <p style="margin-top: 20px;">
+                    <a href="Beharrezko_elementuak/Programak/Delta_Praktika_sim.zap17" target="_blank" rel="noopener noreferrer" class="carousel-link">
+                        <span class="lang-eu">Deskargatu Fitxategia</span><span class="lang-es">Descargar Archivo</span>
+                    </a>
+                </p>
+
+                <div class="video-container" style="display: flex; justify-content: center; margin: 30px 0;">
+                    <video controls style="width: 100%; max-width: 1000px; aspect-ratio: 16 / 9; border-radius: 8px; background: #000;">
+                        <source src="Beharrezko_elementuak/Bideoak/Praktika_simu_eus_e.mp4" type="video/mp4">
+                    </video>
+                </div>
+
+                <hr style="margin: 40px 0; border: 0; border-top: 1px solid #eee;">
+
+                <div class="carousel-container" id="p4" style="max-width: 850px; margin: 0 auto; position: relative;">
+                    <div class="carousel-track" style="position: relative; border: 1px solid #ddd; border-radius: 10px; background: #fff; min-height: 550px; overflow: hidden;">
+                        
+                        <figure class="carousel-slide active">
+                            <img src="Beharrezko_elementuak/Argazkiak/spraktika/simulazioa1.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6; color: #212529;">
+                                <strong style="display: block; font-size: 1.1rem; color: #00a0d2; margin-bottom: 8px;"><span class="lang-eu">Propietateak</span><span class="lang-es">Propiedades</span></strong>
+                                <span class="lang-eu">Proiektuaren gainean, eskumako botoiarekin klik egin eta propietateetan sartu. Ondoren simulazioa ahalbidetu protection atalean.</span>
+                                <span class="lang-es">Haz clic derecho sobre el proyecto y entra en propiedades. Luego habilita la simulación en el apartado protection.</span>
+                            </figcaption>
+                        </figure>
+
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/spraktika/simulazioa2.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;"><span class="lang-eu">Objetu teknologikoak</span><span class="lang-es">Objetos tecnológicos</span></strong>
+                                <span class="lang-eu">Beherago azaltzen dira hauek, baina simulatzeko, goiko irudian ikusten den laukitxoa markatu behar da.</span>
+                                <span class="lang-es">Se explican más abajo, pero para simular hay que marcar la casilla que se ve en la imagen superior.</span>
+                            </figcaption>
+                        </figure>
+
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/spraktika/simulazioa3.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;"><span class="lang-eu">Simulazioa hasiera</span><span class="lang-es">Inicio de simulación</span></strong>
+                                <span class="lang-eu">Simulazioa hasteko, borobil gorriak markatzen duen ikonotxoa sakatu behar da. Kontuz, PLC-a aukeratuta eduki.</span>
+                                <span class="lang-es">Para iniciar la simulación, hay que pulsar el icono marcado por el círculo rojo. Cuidado, ten seleccionado el PLC.</span>
+                            </figcaption>
+                        </figure>
+
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/spraktika/simulazioa4.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;"><span class="lang-eu">Kargatu I</span><span class="lang-es">Cargar I</span></strong>
+                                <span class="lang-eu">Behin PLC simulatua agertzen denean, lehio batzuk baieztatu edo onartuko beharko dira puntu honetara heltzeko.</span>
+                                <span class="lang-es">Una vez aparezca el PLC simulado, habrá que confirmar o aceptar algunas ventanas para llegar a este punto.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/spraktika/simulazioa5.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;"><span class="lang-eu">Kargatu II</span><span class="lang-es">Cargar II</span></strong>
+                                <span class="lang-eu">Puntu honetan, gure PLC birtuala aurkituko dugu eta kargatu egingo dugu, PLC normal bat izango balitz bezala.</span>
+                                <span class="lang-es">En este punto, encontraremos nuestro PLC virtual y lo cargaremos como si fuera un PLC normal.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/spraktika/simulazioa6.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">Kinematics</strong>
+                                <span class="lang-eu">Aurrerago ikusiko diren blokeak erabilita edota mugimenduak erabilita, gure robota simulatuko dugu. Nola mugitzen den ikusteko eta bere puntuak zeintzuk diren, hemen ikusiko dugu.</span>
+                                <span class="lang-es">Utilizando los bloques o movimientos que se verán más adelante, simularemos nuestro robot. Para ver cómo se mueve y cuáles son sus puntos, lo observaremos aquí.</span>
+                            </figcaption>
+                        </figure>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
+                        <button onclick="moveCarousel('p4', -1)" class="carousel-link"><span class="lang-eu">&larr; Aurrekoa</span><span class="lang-es">&larr; Anterior</span></button>
+                        <span class="counter-text" style="color: #666; font-weight: bold;">1 / 6</span>
+                        <button onclick="moveCarousel('p4', 1)" class="carousel-link"><span class="lang-eu">Hurrengoa &rarr;</span><span class="lang-es">Siguiente &rarr;</span></button>
+                    </div>
+                </div>
+            </section>
+        </details>
+        
+<details>
+            <summary>
+                <span class="lang-eu">9. Praktika 1: Objetu Teknologikoak</span>
+                <span class="lang-es">9. Práctica 1: Objetos Tecnológicos</span>
+            </summary>
+            <section style="padding: 20px; font-family: sans-serif;">
+                <div class="lang-eu">
+                    <p>Atal honetan aurreko proiektuan oinarrituta, beharrezko objetu teknologikoak sortuko ditugu. Horretarako beheko proiektu honetan oinarrituko gara.</p>
+                </div>
+                <div class="lang-es">
+                    <p>En este apartado, basándonos en el proyecto anterior, crearemos los objetos tecnológicos necesarios. Para ello nos basaremos en el siguiente proyecto.</p>
+                </div>
+                
+                <p style="margin-top: 20px;">
+                    <a href="Beharrezko_elementuak/Programak/Delta_Praktika_0.zap17" target="_blank" rel="noopener noreferrer" class="carousel-link">
+                        <span class="lang-eu">Deskargatu Fitxategia</span>
+                        <span class="lang-es">Descargar Archivo</span>
+                    </a>
+                </p>
+                
+                <div class="video-container" style="display: flex; justify-content: center; margin: 30px 0;">
+                    <video controls style="width: 100%; max-width: 1000px; aspect-ratio: 16 / 9; border-radius: 8px; background: #000;">
+                        <source src="Beharrezko_elementuak/Bideoak/Praktika_1_eus_e.mp4" type="video/mp4">
+                    </video>
+                </div>
+
+                <hr style="margin: 40px 0; border: 0; border-top: 1px solid #eee;">
+
+                <div class="carousel-container" id="p1" style="max-width: 850px; margin: 0 auto; position: relative;">
+                    <div class="carousel-track" style="position: relative; border: 1px solid #ddd; border-radius: 10px; background: #fff; min-height: 550px; overflow: hidden;">
+                        
+                        <figure class="carousel-slide active">
+                            <img src="Beharrezko_elementuak/Argazkiak/1praktika/1praktika1.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">
+                                    <span class="lang-eu">Objetu Teknologikoa</span><span class="lang-es">Objeto Tecnológico</span>
+                                </strong>
+                                <span class="lang-eu">Posizioko 3 objetu teknologiko sortu, A1_axis, A2_axis eta A3_axis</span>
+                                <span class="lang-es">Crear 3 objetos tecnológicos de posicionamiento, A1_axis, A2_axis y A3_axis</span>
+                            </figcaption>
+                        </figure>
+
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/1praktika/1praktika2.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">
+                                    <span class="lang-eu">Parametrizazio Orokorra</span><span class="lang-es">Parametrización General</span>
+                                </strong>
+                                <span class="lang-eu">Ardatz mota Rotary izango da eta gradu, gradu/segunduko eta Nm unitateak erabiliko ditugu</span>
+                                <span class="lang-es">El tipo de eje será Rotary y utilizaremos las unidades grados, grados/segundo y Nm</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/1praktika/1praktika3.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">Drive</strong>
+                                <span class="lang-eu">Obejetu teknologiko bakoitzean, drive batekin konektatu behar da, hau da V90 PN bakoitza objetu teknologikoarekin konektatu (a1, a2 eta a3 deitzen dira V90 PN-ak).</span>
+                                <span class="lang-es">En cada objeto tecnológico, se debe conectar con un drive, es decir, conectar cada V90 PN con su objeto tecnológico (los V90 PN se llaman a1, a2 y a3).</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/1praktika/1praktika4.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">Encoder</strong>
+                                <span class="lang-eu">Encoder izenko atal honetan bakoitza bere encoderrarekin lotu behar da, hau da A1_axis objetua a1 driveren encoderrarekin. Hautatuko dugun en coderra cyclic absloute izango da.</span>
+                                <span class="lang-es">En este apartado llamado Encoder, cada uno debe vincularse con su encoder, es decir, el objeto A1_axis con el encoder del drive a1. El encoder que seleccionaremos será cyclic absolute.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/1praktika/1praktika5.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">
+                                    <span class="lang-eu">Driveren datu komunikazioa</span><span class="lang-es">Comunicación de datos del Drive</span>
+                                </strong>
+                                <span class="lang-eu">Onlinekoa aktibatuko dugu eta Offlinekoa desaktibatu. Biak aktibatuta ere ondo funtzionatuko luke.</span>
+                                <span class="lang-es">Activaremos el modo Online y desactivaremos el Offline. Aunque con ambos activados también funcionaría bien.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/1praktika/1praktika6.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">
+                                    <span class="lang-eu">Encoderraren datu komunikazioa</span><span class="lang-es">Comunicación de datos del Encoder</span>
+                                </strong>
+                                <span class="lang-eu">Onlinekoa aktibatuko dugu eta Offlinekoa desaktibatu. Biak aktibatuta ere ondo funtzionatuko luke.</span>
+                                <span class="lang-es">Activaremos el modo Online y desactivaremos el Offline. Aunque con ambos activados también funcionaría bien.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/1praktika/1praktika7.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">
+                                    <span class="lang-eu">Mekanika parametroak</span><span class="lang-es">Parámetros mecánicos</span>
+                                </strong>
+                                <span class="lang-eu">Kasu honetan, erreduktorearen indizea jarri behar dugu, hau da serbomotoreak ematen dituen bira kopurua kargak bat ematen duenean.</span>
+                                <span class="lang-es">En este caso, debemos poner el índice de la reductora, es decir, el número de vueltas que da el servomotor cuando la carga da una.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/1praktika/1praktika8.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">
+                                    <span class="lang-eu">Datu dinamikoak</span><span class="lang-es">Datos dinámicos</span>
+                                </strong>
+                                <span class="lang-eu">Aurrerago ikusiko dugun bezala, blokeetan -1 jartzen baldin badugu, datu hauek hartuko ditu gure blokeak. Badaezpada, datu hauek jarrita utziko ditugu.</span>
+                                <span class="lang-es">Como veremos más adelante, si ponemos -1 en los bloques, nuestro bloque tomará estos datos. Por si acaso, dejaremos estos datos puestos.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/1praktika/1praktika9.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">
+                                    <span class="lang-eu">Emergentziazko geldiera</span><span class="lang-es">Parada de emergencia</span>
+                                </strong>
+                                <span class="lang-eu">Emergentzia geldiera bat baldi badago datu hauek erabiliko ditu frenatzeko.</span>
+                                <span class="lang-es">Si hay una parada de emergencia, utilizará estos datos para frenar.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/1praktika/1praktika10.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">
+                                    <span class="lang-eu">Posizio limiteak</span><span class="lang-es">Límites de posición</span>
+                                </strong>
+                                <span class="lang-eu">Atal honetan, limite batzuk ezarri daitezke, Hardwrekorik ez daukagu, beraz Software limiteak aktibatuko ditugu. Angelu hauetatik kanpo ezingo da mugitu.</span>
+                                <span class="lang-es">En este apartado se pueden establecer unos límites. No tenemos Hardware para ello, así que activaremos los límites de Software. Fuera de estos ángulos no se podrá mover.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/1praktika/1praktika11.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">
+                                    <span class="lang-eu">Limite dianmikoak</span><span class="lang-es">Límites dinámicos</span>
+                                </strong>
+                                <span class="lang-eu">Atal honetan limite dinamikoak ezarriko ditugu, hauetatik gora ezingo da erabili.</span>
+                                <span class="lang-es">En este apartado estableceremos límites dinámicos, por encima de estos no se podrá usar.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/1praktika/1praktika12.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">
+                                    <span class="lang-eu">Begizta kontrola</span><span class="lang-es">Control de lazo cerrado</span>
+                                </strong>
+                                <span class="lang-eu">Kasu honetan Kv-a aldatu dugu, posible da gehiago jartzea 6 ingururarte. Gure kasuan, 1.8-rekin ondo doa. Datu hau auto-tunning bat eginda aterata dago (egia da delta robot osoarekin ez).</span>
+                                <span class="lang-es">En este caso hemos cambiado el Kv, es posible poner más, hasta cerca de 6. En nuestro caso, con 1.8 va bien. Este dato se ha obtenido realizando un auto-tuning (aunque es cierto que no con el robot delta completo).</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/1praktika/1praktika13.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">
+                                    <span class="lang-eu">Kinematika</span><span class="lang-es">Cinemática</span>
+                                </strong>
+                                <span class="lang-eu">3 Objetu teknologiko sinpleak egin eta gero, beste objetu teknologiko bat sortuko dugu, kinematics motakoa. Delta_Robota deituko diogu adibidez.</span>
+                                <span class="lang-es">Después de crear 3 objetos tecnológicos simples, crearemos otro objeto tecnológico, de tipo kinematics. Le llamaremos Delta_Robota, por ejemplo.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/1praktika/1praktika14.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">
+                                    <span class="lang-eu">Interkonexioak</span><span class="lang-es">Interconexiones</span>
+                                </strong>
+                                <span class="lang-eu">Sortutako kinematics-ean, interconnections gure objetu teknologiko sinpleak jarriko ditugu. </span>
+                                <span class="lang-es">En el kinematics creado, en interconnections, pondremos nuestros objetos tecnológicos simples.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/1praktika/1praktika15.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">
+                                    <span class="lang-eu">Geometria</span><span class="lang-es">Geometría</span>
+                                </strong>
+                                <span class="lang-eu">Geometry atalean, gure delta robotaren dimensioak jarri behar dizkiogu milimetrotan.</span>
+                                <span class="lang-es">En el apartado Geometry, debemos introducir las dimensiones de nuestro robot delta en milímetros.</span>
+                            </figcaption>
+                        </figure>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
+                        <button onclick="moveCarousel('p1', -1)" class="carousel-link"><span class="lang-eu">&larr; Aurrekoa</span><span class="lang-es">&larr; Anterior</span></button>
+                        <span class="counter-text" style="color: #666; font-weight: bold;">1 / 15</span>
+                        <button onclick="moveCarousel('p1', 1)" class="carousel-link"><span class="lang-eu">Hurrengoa &rarr;</span><span class="lang-es">Siguiente &rarr;</span></button>
+                    </div>
+                </div>
+                
+                <div class="lang-eu"><p>Atal hau eta gero izan beharreko proiektua hau da.</p></div>
+                <div class="lang-es"><p>El proyecto resultante después de este apartado es este.</p></div>
+                
+                <p style="margin-top: 20px;">
+                    <a href="Beharrezko_elementuak/Programak/Delta_Praktika_1.zap17" target="_blank" rel="noopener noreferrer" class="carousel-link">
+                        <span class="lang-eu">Deskargatu Fitxategia</span><span class="lang-es">Descargar Archivo</span>
+                    </a>
+                </p>
+            </section>
+        </details>
+
+        <details>
+            <summary>
+                <span class="lang-eu">10. Praktika 2: Ardatz bakoitzaren mugimendua, Homing, Stop eta Reset</span>
+                <span class="lang-es">10. Práctica 2: Movimiento de cada eje, Homing, Stop y Reset</span>
+            </summary>
+            <section style="padding: 20px; font-family: sans-serif;">
+                <div class="lang-eu">
+                    <p>Atal honetan aurreko proiektuan oinarrituta, Power, MoveJog, Home, Reset, Stop eta HMI-a landuko ditugu. Horretarako beheko proiektu honetan oinarrituko gara.</p>
+                </div>
+                <div class="lang-es">
+                    <p>En este apartado, basándonos en el proyecto anterior, trabajaremos Power, MoveJog, Home, Reset, Stop y el HMI. Para ello nos basaremos en el siguiente proyecto.</p>
+                </div>
+                
+                <p style="margin-top: 20px;">
+                    <a href="Beharrezko_elementuak/Programak/Delta_Praktika_1.zap17" target="_blank" rel="noopener noreferrer" class="carousel-link">
+                        <span class="lang-eu">Deskargatu Fitxategia</span><span class="lang-es">Descargar Archivo</span>
+                    </a>
+                </p>
+                
+                <div class="video-container" style="display: flex; justify-content: center; margin: 30px 0;">
+                    <video controls style="width: 100%; max-width: 1000px; aspect-ratio: 16 / 9; border-radius: 8px; background: #000;">
+                        <source src="Beharrezko_elementuak/Bideoak/Praktika_2_eus_e.mp4" type="video/mp4">
+                    </video>
+                </div>
+
+                <hr style="margin: 40px 0; border: 0; border-top: 1px solid #eee;">
+
+                <div class="carousel-container" id="p2" style="max-width: 850px; margin: 0 auto; position: relative;">
+                    <div class="carousel-track" style="position: relative; border: 1px solid #ddd; border-radius: 10px; background: #fff; min-height: 550px; overflow: hidden;">
+                        
+                        <figure class="carousel-slide active">
+                            <img src="Beharrezko_elementuak/Argazkiak/2praktika/2praktika0.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">
+                                    <span class="lang-eu">Motion Controleko blokeak</span><span class="lang-es">Bloques de Motion Control</span>
+                                </strong>
+                                <span class="lang-eu">Motion Control-eko blokeak, instruciones atalean daude. Bertan tecnologia atalean eta Motion Control izeneko karpeta batean.Gogoratu bloke bakoitzaren gainean F1 sakatzen badugu laguntza jasoko dugula.</span>
+                                <span class="lang-es">Los bloques de Motion Control se encuentran en el apartado instrucciones. Dentro, en la sección tecnología y en una carpeta llamada Motion Control. Recuerda que si pulsamos F1 sobre cada bloque recibiremos ayuda.</span>
+                            </figcaption>
+                        </figure>
+
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/2praktika/2praktika1.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">MC Power</strong>
+                                <span class="lang-eu">Edozein ardatz mugitzeko, hau energizatu egin behar da, horretarako MC Power blokea erabiliko da. Adi, Axis puntuan energizatu nahi den OT gehitu eta Enable atalean "1" logiko bat mantendu ("0" sartzen den unean energizatuta egoteri uzten dio). Status aldagaian True ematen badu ondo energizatuta dago.</span>
+                                <span class="lang-es">Para mover cualquier eje, este debe ser energizado; para ello se utilizará el bloque MC Power. Atención, en la entrada Axis añade el OT que se desea energizar y en el apartado Enable mantén un "1" lógico (en el momento que entra un "0" deja de estar energizado). Si la variable Status da True, está bien energizado.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/2praktika/2praktika2.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">Power DB</strong>
+                                <span class="lang-eu">Kasu honetan (ez da zertan honela egin), 3 OT (objetktu telnologiko) power-ak FB batean sartu dira. Sarrera bezala noiz aktibatuko diren (Power_ax) eta irteera bezala bere egoera (status, true bada ondo energizatu da) eta errorea izango dira. OB1ean deitu behar da, DB bat sortuko da.</span>
+                                <span class="lang-es">En este caso (no tiene por qué hacerse así), los powers de 3 OT (objetos tecnológicos) se han metido en un FB. Como entrada se indicará cuándo se activarán (Power_ax) y como salida su estado (status, si es true se ha energizado bien) y el error. Se debe llamar en el OB1, se creará un DB.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/2praktika/2praktika3.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">
+                                    <span class="lang-eu">Frenuen kudeaketa</span><span class="lang-es">Gestión de frenos</span>
+                                </strong>
+                                <span class="lang-eu">Frenuak kentzeko irteerak aktibatu behar dira. Modu desberdinetara egin daiteke kudeaketa, kasu honetan, Power-eko Statusa aktibatzen direnean, frenua aktibatuko da, beraz liberatu egingo da. Hortik aparte, marka bat ere jarri da, fortzatu nahi bada edo HMI-tik frenuak liberatu.</span>
+                                <span class="lang-es">Para quitar los frenos hay que activar las salidas. La gestión se puede hacer de distintas maneras; en este caso, cuando se activan los Status del Power, se activará el freno, por lo tanto se liberará. Aparte de eso, también se ha puesto una marca por si se quiere forzar o liberar los frenos desde el HMI.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/2praktika/2praktika4.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">MC MOVEJOG</strong>
+                                <span class="lang-eu">Bloke honi esker, OT bakoitz independienteki mugitu daiteke. Horretarako, Axis atalean mugitu nahi den OT-a aukeratu, JogFordward eta Jog Backward-en aldagai booleanoak jarrita eta hauetako bat "1" bezala jarrita mugituko da. Beste aldagaietan, DB batetan gordetako datuak kargatzen dira. </span>
+                                <span class="lang-es">Gracias a este bloque, cada OT se puede mover independientemente. Para ello, en el apartado Axis elige el OT que se quiere mover; introduciendo variables booleanas en JogForward y JogBackward y poniendo una de ellas a "1" se moverá. En las otras variables, se cargan los datos guardados en un DB.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/2praktika/2praktika5.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">
+                                    <span class="lang-eu">Parametroak DB</span><span class="lang-es">DB de Parámetros</span>
+                                </strong>
+                                <span class="lang-eu">MOVEJOG blokerako behar diren parametroak daude hemen. Gogoratu OT bat bakarrik mugitzeko dela, º/s, º/s^2 eta º/s^3 izango dira. Irudian agertzen diren balioak jarri.</span>
+                                <span class="lang-es">Aquí están los parámetros necesarios para el bloque MOVEJOG. Recuerda que es para mover un solo OT, serán º/s, º/s^2 y º/s^3. Pon los valores que aparecen en la imagen.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/2praktika/2praktika6.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">MOVEJOG FB</strong>
+                                <span class="lang-eu">Kasu honetan ere, MOVEJOG hirurak FB batetan sartu dira. FB horretako sarrerak A1+, A1-, A2+, A2-, A3+ eta A3- aldagai booleanoak izango dira. OB1ean deitu behar da, DB bat sortuko da.</span>
+                                <span class="lang-es">En este caso también, los tres MOVEJOG se han introducido en un FB. Las entradas de ese FB serán las variables booleanas A1+, A1-, A2+, A2-, A3+ y A3-. Se debe llamar en el OB1, se creará un DB.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/2praktika/2praktika7.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">MC HOME</strong>
+                                <span class="lang-eu">Bloke hau ez dugu exekutatuko. Enkoder absolutua duenez, baten eginda nahikoa da (eginda dago). Zuek jakiteko, Home egin nahi den tokira eraman (kamaratik ez denez ondo ikusten horregatik ez da egingo), aukeratu nahi de OT-a eta execute-n True sartu (Mode 7 enkoder absolutuentzat) eta hori izango da bere 0-a.</span>
+                                <span class="lang-es">No ejecutaremos este bloque. Como tiene encoder absoluto, con hacerlo una vez es suficiente (ya está hecho). Para que lo sepáis, llévalo al sitio donde se quiere hacer el Home (como no se ve bien por la cámara por eso no se hará), elige el OT deseado y en execute introduce True (Mode 7 para encoders absolutos) y ese será su 0.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/2praktika/2praktika8.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">HOME FB</strong>
+                                <span class="lang-eu">Kasu honetarako ere FB bat eginda. Sarrerak, Home noiz exekutatu eta irteerak blokearen done-ak (home egin badu true ematen du) izango dira (OT bakoitzarentzat bat). Ikusten den bezala, aurrean "Always false" (zikloko marka) jarrita dago ez exekutatzeko.OB1ean deitu behar da, DB bat sortuko da.</span>
+                                <span class="lang-es">Para este caso también se ha hecho un FB. Las entradas serán cuándo ejecutar el Home y las salidas los done del bloque (si ha hecho home da true) (uno para cada OT). Como se ve, delante tiene puesto "Always false" (marca de ciclo) para que no se ejecute. Se debe llamar en el OB1, se creará un DB.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/2praktika/2praktika9.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">MC RESET</strong>
+                                <span class="lang-eu">MC Reset honek Kinematika osoa erresetatzen du, hau da, delta robotaren OT-a erreseteatzen du.</span>
+                                <span class="lang-es">Este MC Reset resetea la Cinemática entera, es decir, resetea el OT del robot delta.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/2praktika/2praktika10.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">MC RESET</strong>
+                                <span class="lang-eu">MC Resetak, multzoak erreseteatzen ditu eta baita OT sinpleak ere. Hau da, zuk aukeratzen duzun ardatza erreseteatzen du.</span>
+                                <span class="lang-es">Los MC Reset, resetean los grupos y también los OT simples. Es decir, resetea el eje que tú elijas.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/2praktika/2praktika11.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">MOTION KINEMATICS</strong>
+                                <span class="lang-eu">Tecnologia barruan, Motion Control karpeta barruan Motion (kinematics) karpeta dago. Bertan, multzorako (kinematika) blokeak daude. Hemen daude mugimendu interpolatuak, stopak, interruptak.....</span>
+                                <span class="lang-es">Dentro de Tecnología, en la carpeta Motion Control está la carpeta Motion (kinematics). Ahí están los bloques para el grupo (cinemática). Aquí están los movimientos interpolados, stops, interrupts...</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/2praktika/2praktika12.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">MC GROUPSTOP</strong>
+                                <span class="lang-eu">Kasu honeta GROUPSTOP blokea hartu dugu. Robot Delta osoa hartzen duen OT-a (objetu teknologikoa) jarri dugu AxesGroup aldagaian.Beraz, execute aldagaiena True bat sartzen badugu, robot delta osoa geldituko da.</span>
+                                <span class="lang-es">En este caso hemos cogido el bloque GROUPSTOP. Hemos puesto el OT (objeto tecnológico) que engloba todo el Robot Delta en la variable AxesGroup. Por lo tanto, si introducimos un True en la variable execute, todo el robot delta se detendrá.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/2praktika/2praktika13.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">HMI</strong>
+                                <span class="lang-eu">HMI hau ematen da, zuek aldagaiekin lotu dezazuen. PLC-arekin konexioa ere eginda dago. Simulatu egingo da, horretarako, irudian ikusten den borobil gorrian dagoen botoia sakatu behar da.</span>
+                                <span class="lang-es">Se os proporciona este HMI para que lo vinculéis con las variables. La conexión con el PLC también está hecha. Se simulará, para ello hay que pulsar el botón que está en el círculo rojo que se ve en la imagen.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/2praktika/2praktika14.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">SWITCH</strong>
+                                <span class="lang-eu">Switch-aren eventos atalean, Switch ON klikatuta, ActivarBit jarriko dugu. PLC-ra joan Power_DB (Power FB-a OB1ean sartzerakoan sortzen da DB hau) aukeratu eta Power_a1 aukeratu.Switch OFF-ean DesactivarBit aukeratuko dugu eta aldagai berdina aukeratu. Berdina beste biekin. Freno A1, A2 eta A3rekin ere berdin.</span>
+                                <span class="lang-es">En el apartado eventos del Switch, haciendo clic en Switch ON, pondremos ActivarBit. Ve al PLC, elige Power_DB (este DB se crea al meter el FB de Power en el OB1) y elige Power_a1. En el Switch OFF elegiremos DesactivarBit y elegiremos la misma variable. Lo mismo con los otros dos. Y lo mismo con los Frenos A1, A2 y A3.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/2praktika/2praktika15.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">
+                                    <span class="lang-eu">PULSADOREA</span><span class="lang-es">PULSADOR</span>
+                                </strong>
+                                <span class="lang-eu">Pultsadoreko eventos atalean, Pulsar atala aukeratuko dugu. Bilatu beharreko ebentua, Activar Mientras Tecla Pulsada aukeratuko dugu. Aldagaietan, aurrekoan bezala, MoveJOG-an FB-a OB1-ean sartzerakoan sortutako DB-a aukeratuko dugu. Bertan nahi dugun aldagaia aukeratu. Beste bost pultsadoreetan berdin.</span>
+                                <span class="lang-es">En el apartado eventos del pulsador, elegiremos el apartado Pulsar. El evento a buscar, elegiremos Activar Mientras Tecla Pulsada. En las variables, como antes, elegiremos el DB creado al introducir el FB del MoveJOG en el OB1. Ahí elige la variable deseada. En los otros cinco pulsadores igual.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/2praktika/2praktika16.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">
+                                    <span class="lang-eu">FRENUAREN ARGIA</span><span class="lang-es">LUZ DEL FRENO</span>
+                                </strong>
+                                <span class="lang-eu">Argi hauekin, gure frenua liberatuta dagoen edo ez adieraziko digute. Horretarako, Aimaciones atalean, animazio bat gehituko diogu, apariencia. Bertan, Q30.X aukeratuko dugu, bakoitzarentzat berea. "0" denean, grisa izango da, "1" denean berdea.</span>
+                                <span class="lang-es">Con estas luces, nos indicarán si nuestro freno está liberado o no. Para ello, en el apartado Animaciones, le añadiremos una animación, apariencia. Ahí elegiremos Q30.X, la suya para cada uno. Cuando sea "0" será gris, cuando sea "1" verde.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/2praktika/2praktika17.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">
+                                    <span class="lang-eu">A1 OT-ko graduak</span><span class="lang-es">Grados del OT A1</span>
+                                </strong>
+                                <span class="lang-eu">A1, A2 eta A3 display-etan, beraietako bat aukeratuta, propiedades atalean, general atalean sartuko gara. Process value izeneko atalean, PLC-ko aldagaietara joango gara, bertan A1-eko OT-ean klikatu eta Actual Position hartu. Irudiko argazkia beharbada ez da berdina, baina konfigurazioa hau da. Irudiko Konfigurazioa jarri.</span>
+                                <span class="lang-es">En los displays de A1, A2 y A3, seleccionando uno de ellos, en el apartado propiedades, entraremos en general. En el apartado llamado Process value, iremos a las variables del PLC, allí haremos clic en el OT de A1 y cogeremos Actual Position. Quizás la foto de la imagen no sea igual, pero la configuración es esta. Pon la configuración de la imagen.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/2praktika/2praktika18.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">
+                                    <span class="lang-eu">Robotaren TCP-aren lokalizazioa</span><span class="lang-es">Localización del TCP del robot</span>
+                                </strong>
+                                <span class="lang-eu">Aurreko atalaren antzekoa da kasu honetan. OT-a aukeratzerakoan Robot Delta aukeratuko dugu eta bertan TCPInWcs, x, Position. Y eta Z-rekin ere berdin egin.</span>
+                                <span class="lang-es">Es similar al apartado anterior en este caso. Al elegir el OT elegiremos Robot Delta y allí TCPInWcs, x, Position. Hacer lo mismo con Y y Z.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/2praktika/2praktika19.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">
+                                    <span class="lang-eu">HMI Aldagaiak</span><span class="lang-es">Variables HMI</span>
+                                </strong>
+                                <span class="lang-eu">Irudi honetan, HMI-ko aldagaiak ikusten dira. Hemen ikusten da HMI-ko aldagai hauek PLC-ko zein aldagaiekin lotzen diren.</span>
+                                <span class="lang-es">En esta imagen, se ven las variables del HMI. Aquí se observa cómo estas variables del HMI se vinculan con qué variables del PLC.</span>
+                            </figcaption>
+                        </figure>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
+                        <button onclick="moveCarousel('p2', -1)" class="carousel-link"><span class="lang-eu">&larr; Aurrekoa</span><span class="lang-es">&larr; Anterior</span></button>
+                        <span class="counter-text" style="color: #666; font-weight: bold;">1 / 20</span>
+                        <button onclick="moveCarousel('p2', 1)" class="carousel-link"><span class="lang-eu">Hurrengoa &rarr;</span><span class="lang-es">Siguiente &rarr;</span></button>
+                    </div>
+                </div>
+                
+                <div class="lang-eu"><p>Atal hau eta gero izan beharreko proiektua hau da.</p></div>
+                <div class="lang-es"><p>El proyecto resultante después de este apartado es este.</p></div>
+                
+                <p style="margin-top: 20px;">
+                    <a href="Beharrezko_elementuak/Programak/Delta_Praktika_2.zap17" target="_blank" rel="noopener noreferrer" class="carousel-link">
+                        <span class="lang-eu">Deskargatu Fitxategia</span><span class="lang-es">Descargar Archivo</span>
+                    </a>
+                </p>
+                
+            </section>
+        </details>
+
+        <details>
+            <summary>
+                <span class="lang-eu">11. Praktika 3: Puntuz puntuko mugimenduak, linealak eta zirkularrak (Absolutoak edo erlatiboak)</span>
+                <span class="lang-es">11. Práctica 3: Movimientos punto a punto, lineales y circulares (Absolutos o relativos)</span>
+            </summary>
+            <section style="padding: 20px; font-family: sans-serif;">
+                <div class="lang-eu">
+                    <p>Atal honetan aurreko proiektuan oinarrituta, Mugimendu desberdinak ikusiko ditugu.</p>
+                </div>
+                <div class="lang-es">
+                    <p>En este apartado, basándonos en el proyecto anterior, veremos diferentes movimientos.</p>
+                </div>
+                
+                <p style="margin-top: 20px;">
+                    <a href="Beharrezko_elementuak/Programak/Delta_Praktika_2.zap17" target="_blank" rel="noopener noreferrer" class="carousel-link">
+                        <span class="lang-eu">Deskargatu Fitxategia</span><span class="lang-es">Descargar Archivo</span>
+                    </a>
+                </p>
+                
+                <div class="video-container" style="display: flex; justify-content: center; margin: 30px 0;">
+                    <video controls style="width: 100%; max-width: 1000px; aspect-ratio: 16 / 9; border-radius: 8px; background: #000;">
+                        <source src="Beharrezko_elementuak/Bideoak/" type="video/mp4">
+                    </video>
+                </div>
+
+                <hr style="margin: 40px 0; border: 0; border-top: 1px solid #eee;">
+
+                <div class="carousel-container" id="p3" style="max-width: 850px; margin: 0 auto; position: relative;">
+                    <div class="carousel-track" style="position: relative; border: 1px solid #ddd; border-radius: 10px; background: #fff; min-height: 550px; overflow: hidden;">
+                        
+                        <figure class="carousel-slide active">
+                            <img src="Beharrezko_elementuak/Argazkiak/3praktika/3praktika1.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">
+                                    <span class="lang-eu">Puntuak I</span><span class="lang-es">Puntos I</span>
+                                </strong>
+                                <span class="lang-eu">Puntuak hartzeko DB bat sortuko dugu. Bertan, array[1..4] of LREAL sortuko dugu. [1] x, [2] y, z [3] eta [4] A (azken hau 0 utziko dugu, ez daukagulako) izango dira. Kontuz, puntu absolutuak jartzerako orduan puntu zehatz horretara joango da, erlatiborako erabiliko bada, dagoen puntutik mugituko den datua jarri.</span>
+                                <span class="lang-es">Crearemos un DB para tomar los puntos. En él, crearemos un array[1..4] de LREAL. Serán [1] x, [2] y, z [3] y [4] A (este último lo dejaremos a 0 porque no lo tenemos). Cuidado, al poner puntos absolutos irá a ese punto exacto; si se va a usar para relativo, pon el dato de lo que se moverá desde el punto en el que está.</span>
+                            </figcaption>
+                        </figure>
+
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/3praktika/3praktika1.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">
+                                    <span class="lang-eu">Puntuak II</span><span class="lang-es">Puntos II</span>
+                                </strong>
+                                <span class="lang-eu">Mugimentu zirkularrerako (geroago ikusiko dugu) puntu auxiliar bat beharko da, horrek array[1..3] of LREAL sortuko dugu. [1] x, [2] y eta z [3]. Hemen ere, absolutua edo erlatiboa izan daiteke. Kontuz puntuekin, erlatiboak eta absolutuak ondo bereiztu.</span>
+                                <span class="lang-es">Para el movimiento circular (lo veremos más adelante) se necesitará un punto auxiliar, por lo que crearemos un array[1..3] de LREAL. [1] x, [2] y, y z [3]. Aquí también, puede ser absoluto o relativo. Cuidado con los puntos, diferenciad bien los relativos y los absolutos.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/3praktika/3praktikaxxx.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">
+                                    <span class="lang-eu">Puntu seguruak</span><span class="lang-es">Puntos seguros</span>
+                                </strong>
+                                <span class="lang-eu">Hemen agertzen diren puntuak dira erabiliko ditugunak. Puntu hauek seguruak direla esan ditzazkegu.</span>
+                                <span class="lang-es">Los puntos que aparecen aquí son los que utilizaremos. Podemos decir que estos puntos son seguros.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/3praktika/3praktika2.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">
+                                    <span class="lang-eu">Parametroak I</span><span class="lang-es">Parámetros I</span>
+                                </strong>
+                                <span class="lang-eu">Parametroak DB bat sortu dugu, hemen abiadura, azelerazioa, desazelerazioa eta jerk-a bezalko baloreak zeintzuk izango diren ikusiko ditugu. Bloke bakoitzean bat jarri daiteke, baina DB batean sartzea hobe, parametrizatuta izateko.</span>
+                                <span class="lang-es">Hemos creado un DB de Parámetros, aquí veremos cuáles serán los valores como velocidad, aceleración, deceleración y jerk. Se podría poner uno en cada bloque, pero es mejor meterlo en un DB para tenerlo parametrizado.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/3praktika/3praktika2.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">
+                                    <span class="lang-eu">Parametroak II</span><span class="lang-es">Parámetros II</span>
+                                </strong>
+                                <span class="lang-eu">Bloke honetan abiadura bat baino gehiago jarri dezakegu, gero nahi denean abiadura desberdina izateko. HMI-tik ere sartzea ondo legoke.</span>
+                                <span class="lang-es">En este bloque podemos poner más de una velocidad, para tener una velocidad diferente luego cuando queramos. También estaría bien meterlo desde el HMI.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/3praktika/3praktika3.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">MoveLinearAbsolute</strong>
+                                <span class="lang-eu">Puntu absoluto (punto zehatz bat) batera doa delta robota. Gainera, zuzen doa, hau da linea zuzen bat egingo du. Konfigurazioa, irudian ikusi dezakezue. Kontuz puntua sartzerakoan, puntu absolutoa izan behar da. Abiadurarekin ere kontuz. Execute atalean True bat sartuta mugitzen dira bloke guztiak.</span>
+                                <span class="lang-es">El robot delta va a un punto absoluto (un punto exacto). Además, va recto, es decir, hará una línea recta. Puedes ver la configuración en la imagen. Cuidado al introducir el punto, debe ser un punto absoluto. Cuidado también con la velocidad. Se mueven todos los bloques introduciendo un True en el apartado Execute.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/3praktika/3praktika4.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">
+                                    <span class="lang-eu">MoveLinearAbsolute parametroak I</span><span class="lang-es">Parámetros MoveLinearAbsolute I</span>
+                                </strong>
+                                <span class="lang-eu">Aurrean izan dugun konfigurazioa mantenduko dugu, baina blokearen gainean zaudela F1 sakatuta laguntza ateratzen da. Hemen ikustn da, blokeko sarrera desberdinak zertarako diren. Intersgarria koordenatu sistema aldatu daitekeela (guk ez dugu egingo). Beste bloke batzuetan ere berdina ikusiko da, ez dugu errepikatuko.</span>
+                                <span class="lang-es">Mantendremos la configuración que teníamos antes, pero pulsando F1 estando sobre el bloque sale la ayuda. Aquí se ve para qué son las diferentes entradas del bloque. Es interesante que se puede cambiar el sistema de coordenadas (nosotros no lo haremos). Se verá lo mismo en otros bloques, no lo repetiremos.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/3praktika/3praktika5.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">
+                                    <span class="lang-eu">MoveLinearAbsolute parametroak II</span><span class="lang-es">Parámetros MoveLinearAbsolute II</span>
+                                </strong>
+                                <span class="lang-eu">MoveLinearAbsolute blokeak irteera batzuk ematen dituzte, Done esaterako. Honek, true bat emango digu mugimendua burutzen duenean. Error, Busy edo active interesgarriak izan daitezke.</span>
+                                <span class="lang-es">Los bloques MoveLinearAbsolute dan algunas salidas, como Done por ejemplo. Este nos dará un true cuando complete el movimiento. Error, Busy o active pueden ser interesantes.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/3praktika/3praktika6.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">MoveLinearRelative</strong>
+                                <span class="lang-eu">Aurrekoa bezala, zuzen mugituko da. Kasu honetan, puntua sartu beharrean (konturatu aurrekoan position zen), distantzia sartu behar zaio (distance). Hau da, dagoen puntutik zenbat mugituko den [1] x, [2] y, z [3] eta [4] A (azken hau 0 utziko dugu, ez daukagu). Hau da dagoen puntutik erlatiboa izango da helduko den puntua.</span>
+                                <span class="lang-es">Como el anterior, se moverá recto. En este caso, en lugar de introducir el punto (date cuenta de que en el anterior era position), hay que introducirle la distancia (distance). Es decir, cuánto se moverá desde el punto en el que está [1] x, [2] y, z [3] y [4] A (este último lo dejaremos a 0, no lo tenemos). Es decir, el punto de destino será relativo desde el punto en el que se encuentra.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/3praktika/3praktika7.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">MoveCircularAbsolute</strong>
+                                <span class="lang-eu">Bloke honek mugimendu zirkularrak egiten ditu. Guk emango digun erabilera hau izango da: Dagoen puntutik abiatuta, puntu auxiliar batetik pasatuko da (gogoratu DB-an nola dagoen) eta EndPoint puntuan bukatuko du. Beste erabilera batzuk ere baditu. Aurreko blokean azaldutako parametro batzuk ere berdinak dira.</span>
+                                <span class="lang-es">Este bloque hace movimientos circulares. El uso que le daremos será este: Partiendo del punto en el que está, pasará por un punto auxiliar (recuerda cómo está en el DB) y terminará en el punto EndPoint. También tiene otros usos. Algunos parámetros explicados en el bloque anterior también son iguales.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/3praktika/3praktika8.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">
+                                    <span class="lang-eu">MoveCircularAbsolute parametroak I</span><span class="lang-es">Parámetros MoveCircularAbsolute I</span>
+                                </strong>
+                                <span class="lang-eu">Aurreko blokean ez dauden parametroak hauek dira. CircMode garrantzitsua da, hemen azaltzen den modua 0 modua da, baina gehiago ere baditu. Kontuz eduki behar da beste modu bat aukeratuta.</span>
+                                <span class="lang-es">Estos son los parámetros que no están en el bloque anterior. CircMode es importante, el modo que aparece aquí es el modo 0, pero tiene más. Hay que tener cuidado al elegir otro modo.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/3praktika/3praktika9.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">
+                                    <span class="lang-eu">MoveCircularAbsolute parametroak II</span><span class="lang-es">Parámetros MoveCircularAbsolute II</span>
+                                </strong>
+                                <span class="lang-eu">Aurreko modua desberdina hartzen badugu, PathChoice aukeratu dezakegu, edo CirclePlane.</span>
+                                <span class="lang-es">Si cogemos un modo diferente al anterior, podemos elegir PathChoice, o CirclePlane.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/3praktika/3praktika10.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">
+                                    <span class="lang-eu">MoveCircularRelative parametroak III</span><span class="lang-es">Parámetros MoveCircularRelative III</span>
+                                </strong>
+                                <span class="lang-eu">CircleMode desberdina aukeratuta, radio edota arkua ere jarri behar da.</span>
+                                <span class="lang-es">Si se elige un CircleMode diferente, también hay que poner el radio o el arco.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/3praktika/3praktika11.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">MoveCircularRelative</strong>
+                                <span class="lang-eu">Aurreko MoveCirularAbsolute blokearen berdina egiten du, baina kasu honetan, dagoen puntuarekiko eraltiboak diren mugimenduak egingo ditu. Gure kasuan ez dugu erabiliko hau.</span>
+                                <span class="lang-es">Hace lo mismo que el bloque anterior MoveCirularAbsolute, pero en este caso, hará movimientos que son relativos respecto al punto en el que se encuentra. En nuestro caso no lo usaremos.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/3praktika/3praktika12.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">
+                                    <span class="lang-eu">MoveDirectAbsolute I</span><span class="lang-es">MoveDirectAbsolute I</span>
+                                </strong>
+                                <span class="lang-eu">Bloke honek point to point delakoa egiten du. Hau da, dagoen tokitik esaten zaion puntura doa, baina ardatz guztiak batera martxan jartzen ditu eta bater gelditzen dira, beraz migumendua ez da izango zuzena.</span>
+                                <span class="lang-es">Este bloque hace lo que se conoce como point to point. Es decir, va desde donde está al punto que se le indica, pero pone en marcha todos los ejes a la vez y se detienen a la vez, por lo que el movimiento no será recto.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/3praktika/3praktika12.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">
+                                    <span class="lang-eu">MoveDirectAbsolute II</span><span class="lang-es">MoveDirectAbsolute II</span>
+                                </strong>
+                                <span class="lang-eu">Kasu honetan, puntu absolutua eman behar zaio. Parametroak, ikusten den bezala, ez dira berdinak (abiadura, azelerazioa, desazelerazioa eta Jerk-a). Besteak berdin.</span>
+                                <span class="lang-es">En este caso, hay que darle un punto absoluto. Los parámetros, como se ve, no son iguales (velocidad, aceleración, deceleración y Jerk). Los demás son iguales.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/3praktika/3praktika13.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">
+                                    <span class="lang-eu">MoveDirectAbsolute parametroak I</span><span class="lang-es">Parámetros MoveDirectAbsolute I</span>
+                                </strong>
+                                <span class="lang-eu">Kasu honetan, mugimedu parametro absolutuak hartu beharrean, faktoreak sartzen dira. -1 bada, objetu teknologikoetan jarritakoa, 1 bada objetu teknologikoetan dagoen maximoa. 0 eta 1 artean, proportzional egiten du da. Ardatz azkarrena limitatzen du.</span>
+                                <span class="lang-es">En este caso, en lugar de tomar parámetros de movimiento absolutos, se introducen factores. Si es -1, lo puesto en los objetos tecnológicos; si es 1, el máximo que hay en los objetos tecnológicos. Entre 0 y 1, se hace de forma proporcional. Limita al eje más rápido.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/3praktika/3praktika13.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">
+                                    <span class="lang-eu">MoveDirectAbsolute parametroak II</span><span class="lang-es">Parámetros MoveDirectAbsolute II</span>
+                                </strong>
+                                <span class="lang-eu">Kontutan hartu, kasu honetan 3 ardatzak batera hasten direla mugitzen eta batera bukatzen dutela mugimendua, beraz baten bat azakarrago joan behar da bai edo bai.</span>
+                                <span class="lang-es">Ten en cuenta que en este caso los 3 ejes empiezan a moverse a la vez y terminan el movimiento a la vez, por lo tanto, alguno tiene que ir más rápido sí o sí.</span>
+                            </figcaption>
+                        </figure>
+                        
+                        <figure class="carousel-slide">
+                            <img src="Beharrezko_elementuak/Argazkiak/3praktika/3praktika14.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">MoveDirectRelative</strong>
+                                <span class="lang-eu">Aurrekoaren berdina, baina kasu honetan distantzia (distance) sartu behar zaio, hau da, dagoen puntutik zenbat mugituko den [1] x, [2] y, z [3] eta [4] A (azken hau 0 utziko dugu, ez daukagu). Kontuz honekin. Beste parametroak berdin.</span>
+                                <span class="lang-es">Igual que el anterior, pero en este caso se le debe introducir la distancia (distance), es decir, cuánto se moverá desde el punto en el que está [1] x, [2] y, z [3] y [4] A (este último lo dejaremos a 0, no lo tenemos). Cuidado con esto. Los demás parámetros son iguales.</span>
+                            </figcaption>
+                        </figure>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
+                        <button onclick="moveCarousel('p3', -1)" class="carousel-link"><span class="lang-eu">&larr; Aurrekoa</span><span class="lang-es">&larr; Anterior</span></button>
+                        <span class="counter-text" style="color: #666; font-weight: bold;">1 / 19</span> <button onclick="moveCarousel('p3', 1)" class="carousel-link"><span class="lang-eu">Hurrengoa &rarr;</span><span class="lang-es">Siguiente &rarr;</span></button>
+                    </div>
+                </div>
+            </section>
+        </details>
+
+        <details>
+            <summary>
+                <span class="lang-eu">12. Praktika 4: Pick & Place</span>
+                <span class="lang-es">12. Práctica 4: Pick & Place</span>
+            </summary>
+            <section style="padding: 20px; font-family: sans-serif;">
+                <div class="lang-eu">
+                    <p>Atal honetan zuen programa bat egin beharko duzue.</p>
+                    <p>Egin beharrekoa pieza bat hartu eta beste toki batera eramatea izango da. Mugimendu zirkular bat ere izan beharko du.</p>
+                </div>
+                <div class="lang-es">
+                    <p>En este apartado tendréis que hacer vuestro propio programa.</p>
+                    <p>Lo que hay que hacer será coger una pieza y llevarla a otro sitio. También tendrá que tener un movimiento circular.</p>
+                </div>
+
+                <p style="margin-top: 20px;">
+                    <a href="Beharrezko_elementuak/Programak/Delta_Praktika_xxx.zap17" target="_blank" rel="noopener noreferrer" class="carousel-link">
+                        <span class="lang-eu">Deskargatu Fitxategia</span><span class="lang-es">Descargar Archivo</span>
+                    </a>
+                </p>
+
+                <hr style="margin: 40px 0; border: 0; border-top: 1px solid #eee;">
+
+                <div class="carousel-container" id="p5" style="max-width: 850px; margin: 0 auto; position: relative;">
+                    <div class="carousel-track" style="position: relative; border: 1px solid #ddd; border-radius: 10px; background: #fff; min-height: 550px; overflow: hidden;">
+                        
+                        <figure class="carousel-slide active">
+                            <img src="Beharrezko_elementuak/Argazkiak/pickplace/pickplace1.jpg" style="width: 100%; height: 400px; border-radius: 5px; object-fit: cover;">
+                            <figcaption style="margin-top: 20px; line-height: 1.6;color: #212529;">
+                                <strong style="display: block; color: #00a0d2;">
+                                    <span class="lang-eu">Erabiliko diren puntuak</span><span class="lang-es">Puntos que se utilizarán</span>
+                                </strong>
+                                <span class="lang-eu">Behar dituzuen puntuak hauek dira, ez hartu besterik hauekin egin.</span>
+                                <span class="lang-es">Los puntos que necesitáis son estos, no cojáis otros, hacedlo con estos.</span>
+                            </figcaption>
+                        </figure>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
+                        <button onclick="moveCarousel('p5', -1)" class="carousel-link"><span class="lang-eu">&larr; Aurrekoa</span><span class="lang-es">&larr; Anterior</span></button>
+                        <span class="counter-text" style="color: #666; font-weight: bold;">1 / 1</span>
+                        <button onclick="moveCarousel('p5', 1)" class="carousel-link"><span class="lang-eu">Hurrengoa &rarr;</span><span class="lang-es">Siguiente &rarr;</span></button>
+                    </div>
+                </div>
+            </section>
+        </details>
+
+       
+
+    </main>
+
+    <footer>
+        <div class="lang-eu">
+            <a href="https://example.com">Delta Robotaren erabilera</a> © 2026 by <a href="https://example.com">Kepa Bastegieta</a> is licensed under <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/">CC BY-NC-ND 4.0</a>
+        </div>
+        <div class="lang-es">
+            <a href="https://example.com">Uso del Robot Delta</a> © 2026 by <a href="https://example.com">Kepa Bastegieta</a> está bajo licencia <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/">CC BY-NC-ND 4.0</a>
+        </div>
+        
+        <div style="margin-top: 10px;">
+            <img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="Creative Commons" style="max-width: 1em;max-height:1em;margin-left: .2em; filter: invert(1);">
+            <img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="Atribución" style="max-width: 1em;max-height:1em;margin-left: .2em; filter: invert(1);">
+            <img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="No comercial" style="max-width: 1em;max-height:1em;margin-left: .2em; filter: invert(1);">
+            <img src="https://mirrors.creativecommons.org/presskit/icons/nd.svg" alt="Sin derivadas" style="max-width: 1em;max-height:1em;margin-left: .2em; filter: invert(1);">
+        </div>
+
+        <p style="text-align: center; font-size: 0.9rem; margin-top: 50px; opacity: 0.6;">
+            ReMaket - 2026
+        </p>
+    </footer>
+
+<script>
+        function setLanguage(lang) {
+            const body = document.body;
+            const btnEu = document.getElementById('btn-eu');
+            const btnEs = document.getElementById('btn-es');
+
+            document.documentElement.lang = lang;
+
+            if (lang === 'es') {
+                body.classList.add('is-es');
+                btnEs.setAttribute('aria-pressed', 'true');
+                btnEu.setAttribute('aria-pressed', 'false');
+            } else {
+                body.classList.remove('is-es');
+                btnEu.setAttribute('aria-pressed', 'true');
+                btnEs.setAttribute('aria-pressed', 'false');
+            }
+        }
+
+        // --- SCRIPT ORIGINAL DEL CARRUSEL ---
+        let carousels = {};
+
+        function moveCarousel(id, direction) {
+            const container = document.getElementById(id);
+            const slides = container.querySelectorAll('.carousel-slide');
+            const counter = container.querySelector('.counter-text');
+
+            // Inicializar si es la primera vez
+            if (carousels[id] === undefined) carousels[id] = 0;
+
+            // Quitar clase active al actual
+            slides[carousels[id]].classList.remove('active');
+
+            // Calcular nueva posición
+            carousels[id] = (carousels[id] + direction + slides.length) % slides.length;
+
+            // Añadir clase active al nuevo
+            slides[carousels[id]].classList.add('active');
+
+            // Actualizar contador
+            counter.innerText = (carousels[id] + 1) + " / " + slides.length;
+        }
+    </script>
+
+
+</body>
+</html>
