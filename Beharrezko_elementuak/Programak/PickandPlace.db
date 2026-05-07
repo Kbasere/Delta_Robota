@@ -1,0 +1,70 @@
+﻿DATA_BLOCK "PickandPlace"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+NON_RETAIN
+   VAR 
+      P11 : Array[1..4] of LReal;
+      P12 : Array[1..4] of LReal;
+      P13 : Array[1..4] of LReal;
+      P14 : Array[1..4] of LReal;
+      P15 : Array[1..4] of LReal;
+      P16 : Array[1..4] of LReal;
+      P21 : Array[1..4] of LReal;
+      P22 : Array[1..4] of LReal;
+      P23 : Array[1..4] of LReal;
+      P24 : Array[1..4] of LReal;
+      P25 : Array[1..4] of LReal;
+      P26 : Array[1..4] of LReal;
+      HOME_Maketa : Array[1..4] of LReal;
+      HOME_Prozesua : Array[1..4] of LReal;
+   END_VAR
+
+
+BEGIN
+   P11[1] := -8.41;
+   P11[2] := 146.978;
+   P11[3] := -639.268;
+   P12[1] := -44.924;
+   P12[2] := 134.419;
+   P12[3] := -640.486;
+   P13[1] := -6.878;
+   P13[2] := 134.419;
+   P13[3] := -640.486;
+   P14[1] := -40.763;
+   P14[2] := 95.483;
+   P14[3] := -655.415;
+   P15[1] := -1.729;
+   P15[2] := 66.474;
+   P15[3] := -665.271;
+   P16[1] := -1.729;
+   P16[2] := 66.474;
+   P16[3] := -664.55;
+   P21[1] := 30.092;
+   P21[2] := -90.086;
+   P21[3] := -659.555;
+   P22[1] := -5.95;
+   P22[2] := -88.355;
+   P22[3] := 660.323;
+   P23[1] := 39.06;
+   P23[2] := -130.511;
+   P23[3] := -646.061;
+   P24[1] := 5.438;
+   P24[2] := -128.471;
+   P24[3] := -647.459;
+   P25[1] := 50.48;
+   P25[2] := -168.997;
+   P25[3] := -625.653;
+   P26[1] := 17.162;
+   P26[2] := -166.37;
+   P26[3] := -629.064;
+   HOME_Maketa[1] := 0.0;
+   HOME_Maketa[2] := 0.0;
+   HOME_Maketa[3] := -722.59;
+   HOME_Maketa[4] := 0.0;
+   HOME_Prozesua[1] := 0.0;
+   HOME_Prozesua[2] := 0.0;
+   HOME_Prozesua[3] := -700.0;
+   HOME_Prozesua[4] := 0.0;
+
+END_DATA_BLOCK
+
