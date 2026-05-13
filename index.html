@@ -334,7 +334,7 @@
                     <p>Tutorial honen amaieran, ikaslea gai izango da robot delta osoa martxan jartzeko:</p>
 
                     <div style="margin-bottom: 20px;">
-                        <h3 style="color: #00a0d2; border-bottom: 1px solid #333; padding-bottom: 5px;">1. Hardware Konfigurazioa eta Komunikazioa</h3>
+                        <h3 style="color: #00a0d2; border-bottom: 1px solid #333; padding-bottom: 5px;">1. Hardware Konfigurazioa eta Komunikazioa (praktika 0.1 Konfigurazioa)</h3>
                         <ul>
                             <li><strong>PROFINET Integrazioa:</strong> TIA Portalean PLC-a, ET 200 periferia eta hiru V90 drive-ak sarean integratzea.</li>
                             <li><strong>Parametrizazioa:</strong> Drive-en eta motorren doikuntzak egitea (V-Assistant edo TIA Portal bidez).</li>
@@ -342,7 +342,7 @@
                     </div>
 
                     <div style="margin-bottom: 20px;">
-                        <h3 style="color: #00a0d2; border-bottom: 1px solid #333; padding-bottom: 5px;">2. Objektu Teknologikoen (TO) Kudeaketa</h3>
+                        <h3 style="color: #00a0d2; border-bottom: 1px solid #333; padding-bottom: 5px;">2. Objektu Teknologikoen (TO) Kudeaketa (praktika 1 Objetu teknologikoak)</h3>
                         <ul>
                             <li><strong>Ardatz Linealak:</strong> Hiru <code>TO_PositioningAxis</code> objektu konfiguratzea.</li>
                             <li><strong>Zinematika:</strong> <code>TO_Kinematics</code> objektua sortzea, besoen neurri errealak sartuz robotak bere burua espazioan ($X, Y, Z$) koka dezan.</li>
@@ -351,7 +351,7 @@
                     </div>
 
                     <div style="margin-bottom: 20px;">
-                        <h3 style="color: #00a0d2; border-bottom: 1px solid #333; padding-bottom: 5px;">3. Mugimendu Bakunak (JOG) eta Eskuzko Kontrola</h3>
+                        <h3 style="color: #00a0d2; border-bottom: 1px solid #333; padding-bottom: 5px;">3. Mugimendu Bakunak (JOG) eta Eskuzko Kontrola (praktika 2 ardatz bakoitzaren kontrola)</h3>
                         <ul>
                             <li><strong>Commissioning:</strong> TIA Portal-eko tresnekin motorrak banan-banan mugitzea norabideak eta mugak egiaztatzeko.</li>
                             <li><strong>Koordinazioa:</strong> Robotaren muturra (bentosa) espazioan mugitzea, ardatzen arteko sinkronizazioa ikusteko.</li>
@@ -359,7 +359,15 @@
                     </div>
 
                     <div style="margin-bottom: 20px;">
-                        <h3 style="color: #00a0d2; border-bottom: 1px solid #333; padding-bottom: 5px;">4. Pick & Place Sekuentziaren Programazioa</h3>
+                        <h3 style="color: #00a0d2; border-bottom: 1px solid #333; padding-bottom: 5px;">4. Mugimendu zinematikoak (praktika 3 PtP mugimenduak, linealak eta zirkularrak)</h3>
+                        <ul>
+                        
+                            <li><strong>Motion Blokeak:</strong> <code>MC_MoveLinear</code> edo <code>MC_MoveDirectAbsolute</code> funtzioen erabilera koordenatu kartesiarrekin.</li>
+                            <li><strong>Periferiaren Kontrola:</strong> ET 200 moduluaren bidez elektrobalbulak eta frenuak mugimenduarekin batera gobernatzea.</li>
+                        </ul>
+                    </div>
+					<div style="margin-bottom: 20px;">
+                        <h3 style="color: #00a0d2; border-bottom: 1px solid #333; padding-bottom: 5px;">5. Pick & Place sekuentziaren programazioa (praktika 4 Pick & Place)</h3>
                         <ul>
                             <li><strong>Logika:</strong> Objektu bat $P1$ puntuan jaso eta $P2$ puntuan uzteko sekuentzia osoa.</li>
                             <li><strong>Motion Blokeak:</strong> <code>MC_MoveLinear</code> edo <code>MC_MoveDirectAbsolute</code> funtzioen erabilera koordenatu kartesiarrekin.</li>
@@ -372,7 +380,7 @@
                     <p>Al final de este tutorial, el alumno será capaz de poner en marcha todo el robot delta:</p>
 
                     <div style="margin-bottom: 20px;">
-                        <h3 style="color: #00a0d2; border-bottom: 1px solid #333; padding-bottom: 5px;">1. Configuración Hardware y Comunicación</h3>
+                        <h3 style="color: #00a0d2; border-bottom: 1px solid #333; padding-bottom: 5px;">1. Configuración Hardware y Comunicación (práctica 0.1 Configuración)</h3>
                         <ul>
                             <li><strong>Integración PROFINET:</strong> Integrar en red el PLC, la periferia ET 200 y los tres drives V90 en TIA Portal.</li>
                             <li><strong>Parametrización:</strong> Realizar los ajustes de los drives y motores (mediante V-Assistant o TIA Portal).</li>
@@ -380,7 +388,7 @@
                     </div>
 
                     <div style="margin-bottom: 20px;">
-                        <h3 style="color: #00a0d2; border-bottom: 1px solid #333; padding-bottom: 5px;">2. Gestión de Objetos Tecnológicos (TO)</h3>
+                        <h3 style="color: #00a0d2; border-bottom: 1px solid #333; padding-bottom: 5px;">2. Gestión de Objetos Tecnológicos (TO) (práctica 1 Objetos tecnológicos)</h3>
                         <ul>
                             <li><strong>Ejes Lineales:</strong> Configurar tres objetos <code>TO_PositioningAxis</code>.</li>
                             <li><strong>Cinemática:</strong> Crear el objeto <code>TO_Kinematics</code> introduciendo las medidas reales de los brazos para que el robot se sitúe en el espacio ($X, Y, Z$).</li>
@@ -389,7 +397,7 @@
                     </div>
 
                     <div style="margin-bottom: 20px;">
-                        <h3 style="color: #00a0d2; border-bottom: 1px solid #333; padding-bottom: 5px;">3. Movimientos Simples (JOG) y Control Manual</h3>
+                        <h3 style="color: #00a0d2; border-bottom: 1px solid #333; padding-bottom: 5px;">3. Movimientos Simples (JOG) y Control Manual (práctica 2 kontrol individual de eje)</h3>
                         <ul>
                             <li><strong>Puesta en marcha:</strong> Mover los motores individualmente con las herramientas de TIA Portal para comprobar direcciones y límites.</li>
                             <li><strong>Coordinación:</strong> Mover el extremo del robot (ventosa) en el espacio para observar la sincronización entre los ejes.</li>
@@ -397,7 +405,16 @@
                     </div>
 
                     <div style="margin-bottom: 20px;">
-                        <h3 style="color: #00a0d2; border-bottom: 1px solid #333; padding-bottom: 5px;">4. Programación de la Secuencia Pick & Place</h3>
+                        <h3 style="color: #00a0d2; border-bottom: 1px solid #333; padding-bottom: 5px;">4. Movimientos cinemáticos (práctica 3 movimientos PtP, lineale y circulares)</h3>
+                        <ul>
+                            <li><strong>Lógica:</strong> Secuencia completa para recoger un objeto en el punto $P1$ y dejarlo en el punto $P2$.</li>
+                            <li><strong>Bloques Motion:</strong> Uso de funciones <code>MC_MoveLinear</code> o <code>MC_MoveDirectAbsolute</code> con coordenadas cartesianas.</li>
+                            <li><strong>Control de la Periferia:</strong> Controlar electroválvulas y frenos de forma concurrente al movimiento mediante el módulo ET 200.</li>
+                        </ul>
+                    </div>
+					
+					<div style="margin-bottom: 20px;">
+                        <h3 style="color: #00a0d2; border-bottom: 1px solid #333; padding-bottom: 5px;">5. Programación de la secuencia Pick & Place (práctica 4 Pick & Place)</h3>
                         <ul>
                             <li><strong>Lógica:</strong> Secuencia completa para recoger un objeto en el punto $P1$ y dejarlo en el punto $P2$.</li>
                             <li><strong>Bloques Motion:</strong> Uso de funciones <code>MC_MoveLinear</code> o <code>MC_MoveDirectAbsolute</code> con coordenadas cartesianas.</li>
