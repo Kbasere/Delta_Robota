@@ -190,6 +190,24 @@
             padding: 8px 16px; border-radius: 4px; font-weight: bold; cursor: pointer; transition: 0.2s;
         }
         .btn-lang[aria-pressed="true"] { background-color: #00a0d2; color: white; border-color: #00a0d2; }
+		
+		/* Contenedor para controlar el tamaño del iframe */
+.iframe-wrapper {
+    width: 100%;       /* Puedes cambiar esto a, por ejemplo, 80% */
+    max-width: 1000px; /* Límite máximo de ancho */
+    margin: 0 auto;    /* Centra el iframe si el ancho es menor al 100% */
+}
+
+/* Ajuste para pantallas pequeñas */
+@media (max-width: 768px) {
+    iframe {
+        height: 350px; /* Reducimos la altura en móviles */
+    }
+}
+		
+		
+		
+		
     </style>
 </head>
 <body>
@@ -213,7 +231,25 @@
     </header>
 
     <main>
-        <details>
+        
+		<section aria-labelledby="delta-360-title" style="margin-bottom: 30px;">
+    <h2 id="delta-360-title" class="lang-eu">Robotaren Ikuspegi 360º</h2>
+    <h2 id="delta-360-title-es" class="lang-es">Vista 360º del Robot</h2>
+    
+    <div class="iframe-wrapper">
+        <iframe 
+            src="https://kbasere.github.io/Delta360/" 
+            title="Visualización interactiva 360 del Robot Delta"
+            width="100%" 
+            height="500" 
+            loading="lazy"
+            style="border: 2px solid #005f87; border-radius: 8px;">
+        </iframe>
+    </div>
+</section>
+		
+		
+		<details>
             <summary>
                 <span class="lang-eu">1. Arduradunaren datuak</span>
                 <span class="lang-es">1. Datos del responsable</span>
