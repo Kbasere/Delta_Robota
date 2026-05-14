@@ -204,8 +204,50 @@
         height: 350px; /* Reducimos la altura en móviles */
     }
 }
-		
-		
+	.iframe-focus {
+    width: 100%;
+    height: 400px;
+    transition: all 0.5s ease;
+}
+
+/* Cuando el usuario hace clic o pulsa en el iframe */
+.iframe-focus:focus {
+    height: 800px; /* Se expande mucho más */
+    outline: none;
+    border: 3px solid #00a0d2;
+}	
+	/* --- ESTILOS SIMULADOR MODELO B (ENFOQUE POR CLIC) --- */
+.simulador-container {
+    margin: 40px 0;
+    text-align: center;
+}
+
+.iframe-360 {
+    width: 100%;
+    max-width: 1000px;
+    height: 400px; /* Altura inicial compacta */
+    border: 2px solid #3e444d;
+    border-radius: 12px;
+    transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    outline: none; /* Quitamos el borde por defecto del navegador */
+}
+
+/* Al hacer clic o ganar el foco, el simulador se expande */
+.iframe-360:focus {
+    height: 750px; /* Nueva altura expandida */
+    border-color: #00a0d2;
+    box-shadow: 0 0 30px rgba(0, 160, 210, 0.4);
+    transform: scale(1.01); /* Un ligero aumento para resaltar */
+}
+
+/* Indicador visual para el usuario */
+.instruccion-sim {
+    font-size: 0.85em;
+    color: #00a0d2;
+    margin-bottom: 10px;
+    font-style: italic;
+}	
 		
 		
     </style>
@@ -232,20 +274,21 @@
 
     <main>
         
-		<section aria-labelledby="delta-360-title" style="margin-bottom: 30px;">
-    <h2 id="delta-360-title" class="lang-eu">Robotaren Ikuspegi 360º</h2>
-    <h2 id="delta-360-title-es" class="lang-es">Vista 360º del Robot</h2>
+		<section class="simulador-container" aria-labelledby="titulo-simulador">
+    <h2 id="titulo-simulador" class="lang-eu">Robotaren Ikuspegi 360º</h2>
+    <h2 id="titulo-simulador-es" class="lang-es">Vista 360º del Robot</h2>
     
-    <div class="iframe-wrapper">
-        <iframe 
-            src="https://kbasere.github.io/Delta360/" 
-            title="Visualización interactiva 360 del Robot Delta"
-            width="100%" 
-            height="500" 
-            loading="lazy"
-            style="border: 2px solid #005f87; border-radius: 8px;">
-        </iframe>
-    </div>
+    <p class="instruccion-sim lang-eu">Klikatu simuladorean tamaina handitzeko</p>
+    <p class="instruccion-sim lang-es">Haz clic en el simulador para ampliar el tamaño</p>
+
+    <iframe 
+        class="iframe-360"
+        src="https://kbasere.github.io/Delta360/" 
+        title="Visualización interactiva 360 del Robot Delta"
+        tabindex="0"
+        loading="lazy"
+        allowfullscreen>
+    </iframe>
 </section>
 		
 		
